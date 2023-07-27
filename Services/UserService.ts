@@ -25,7 +25,7 @@ class UserService {
                 where: {
                     [Op.and]: [
                         sequelize.literal(`EXTRACT(HOUR FROM NOW() AT TIME ZONE "timezone") = 8`),
-                        sequelize.literal(`EXTRACT(MINUTE FROM NOW() AT TIME ZONE "timezone") BETWEEN 46 AND 59`),
+                        sequelize.literal(`EXTRACT(MINUTE FROM NOW() AT TIME ZONE "timezone") BETWEEN 55 AND 65`),
                         sequelize.literal(`DATE_PART('month', NOW() AT TIME ZONE "timezone") = DATE_PART('month', "birthday_date" AT TIME ZONE "timezone")`),
                         sequelize.literal(`DATE_PART('day', NOW() AT TIME ZONE "timezone") = DATE_PART('day', "birthday_date" AT TIME ZONE "timezone")`),
                     ],

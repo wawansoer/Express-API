@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
 import Task from '../Models/TaskModel'
 import UserService from './UserService';
-dotenv.config();
 class TaskServie {
     async addTask() {
         try {
@@ -28,7 +26,6 @@ class TaskServie {
                     sent: false,
                 },
                 order: [['createdAt', 'DESC']],
-                limit: Number(process.env.MAX_EMAIL_TO_SENT),
             });
             return unsentTasks
         } catch (error) {
