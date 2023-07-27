@@ -1,7 +1,7 @@
 import express from 'express';
 import UserController from '../Controllers/UserController';
 const router = express.Router();
-import { validate, AddUserValidator } from '../validators';
+import { validate, AddUserValidator } from '../Validators';
 
 router.get('/', (req, res) => {
     res.json({ message: 'This is Express ' });

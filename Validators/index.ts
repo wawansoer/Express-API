@@ -19,6 +19,11 @@ export const validate = (validations: ValidationChain[]) => {
     };
 };
 
+const isValidTimezoneFormat = (value: string) => {
+    const timezoneRegex = /^[A-Za-z_\/]+$/;
+    return timezoneRegex.test(value);
+};
+
 export const AddUserValidator = [
     body('email').isEmail().withMessage('Invalid email address')
         .custom(async (value) => {
@@ -32,6 +37,7 @@ export const AddUserValidator = [
     body('first_name').notEmpty().withMessage('First name is required'),
     body('last_name').notEmpty().withMessage('Last name is required'),
     body('birthday_date').isISO8601().toDate().withMessage('Invalid birthday date'),
-    body('timezone').notEmpty().withMessage('Timezone is required'),
+    body('timezone').notEmpty().withMessage('Timezone is required')
+        .custom(isValidTimezoneFormat).withMessage('Timezone Format Is Invalid'),
     body('location').notEmpty().withMessage('Location is required'),
 ];

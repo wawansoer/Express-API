@@ -1,5 +1,5 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
-import sequelize from '../Configs/SequalizeConfig';
+import sequelize from '../Configs/SequelizeConfig';
 class User extends Model {
     public email!: string;
     public first_name!: string;
@@ -42,7 +42,7 @@ User.init(
     {
         sequelize,
         modelName: 'UserModel',
-        tableName: 'user',
+        tableName: 'Users',
         timestamps: false
     }
 );
