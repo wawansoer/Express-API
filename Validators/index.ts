@@ -1,4 +1,5 @@
 import express from 'express';
+import moment from 'moment-timezone';
 import { body, validationResult, ValidationChain } from 'express-validator';
 import User from '../Models/UserModel';
 
@@ -24,6 +25,7 @@ const isValidTimezoneFormat = (value: string) => {
     return timezoneRegex.test(value);
 };
 
+
 export const AddUserValidator = [
     body('email').isEmail().withMessage('Invalid email address')
         .custom(async (value) => {
@@ -38,6 +40,13 @@ export const AddUserValidator = [
     body('last_name').notEmpty().withMessage('Last name is required'),
     body('birthday_date').isISO8601().toDate().withMessage('Invalid birthday date'),
     body('timezone').notEmpty().withMessage('Timezone is required')
-        .custom(isValidTimezoneFormat).withMessage('Timezone Format Is Invalid'),
+        .custom(isValidTimezoneFormat).withMessage('Timezone Format Is Invalid')
+        .custom(async (value) => {
+            if (moment.tz.names().includes(value)) {
+                return true;
+            } else {
+                throw new Error('Invalid timezone identifier');
+            }
+        }),
     body('location').notEmpty().withMessage('Location is required'),
 ];

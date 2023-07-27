@@ -1,30 +1,31 @@
-import UserService from './UserService';
+import Task from '../Models/TaskModel';
+import TaskService from './TaskService';
 import axios from 'axios';
-const API_URL = 'https://example.com/api/data'; // Replace this with your API endpoint URL
+const API_URL = 'https://email-service.digitalenvision.com.au/send-email';
 
-async function SendEmailService(retryCount: number) {
+async function SendEmailService(datas: any) {
 
-    let users = await UserService.getUsersWithBirthdayAt9AM();
-
-    for (const user of users) {
-        const { email, first_name, last_name, birthday_date, timezone, location } = user.dataValues;
-        try {
-            // const response = await axios.get(API_URL);
-            // const data = response.data;
-            // Handle the API response here
-        } catch (error) {
-            if (retryCount > 0) {
-                console.log(`Request failed. Retrying (${retryCount} attempts left)...`);
-                return SendEmailService(retryCount - 1);
-            } else {
-                console.error('Failed to fetch data after retries.');
-                return null;
-            }
-        }
-        console.log(email)
+    // console.log(datas)
+    for (const data of datas) {
+        const { id, email, message, sent, } = data.dataValues;
+        axios
+            .post(API_URL,
+                {
+                    email: email,
+                    subject: 'Happy Birthday!',
+                    message: message,
+                })
+            .then((response) => {
+                if (response.data.status === 'sent') {
+                    TaskService.markTaskAsSentById(id)
+                }
+                console.log('Response data:', response.data.status);
+            })
+            .catch((error) => {
+                // If there's an error in the request or the server responds with an error status code
+                console.error('Error sent email data:', error);
+            });
     }
-
-
 
 }
 
