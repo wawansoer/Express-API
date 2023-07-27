@@ -2,7 +2,10 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
+let db_log = false
+if (process.env.DB_LOG === "True") {
+    db_log = true
+}
 const sequelize = new Sequelize(
     process.env.DB_NAME!,
     process.env.DB_USER!,
@@ -11,7 +14,7 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST!,
         port: Number(process.env.DB_PORT),
         dialect: 'postgres',
-        logging: true,
+        logging: db_log,
         pool: {
             max: 3,
             min: 1,

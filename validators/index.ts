@@ -1,5 +1,6 @@
 import express from 'express';
 import { body, validationResult, ValidationChain } from 'express-validator';
+import User from '../Models/UserModel';
 
 export const validate = (validations: ValidationChain[]) => {
     return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -19,7 +20,15 @@ export const validate = (validations: ValidationChain[]) => {
 };
 
 export const AddUserValidator = [
-    body('email').isEmail().withMessage('Invalid email address'),
+    body('email').isEmail().withMessage('Invalid email address')
+        .custom(async (value) => {
+            // Check if the email is already in use
+            const user = await User.findOne({ where: { email: value } });
+            if (user) {
+                throw new Error('Email is already in use.');
+            }
+            return true;
+        }),
     body('first_name').notEmpty().withMessage('First name is required'),
     body('last_name').notEmpty().withMessage('Last name is required'),
     body('birthday_date').isISO8601().toDate().withMessage('Invalid birthday date'),
