@@ -1,6 +1,7 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../Configs/SequelizeConfig';
 class User extends Model {
+    public id!: number;
     public email!: string;
     public first_name!: string;
     public last_name!: string;
@@ -12,10 +13,14 @@ class User extends Model {
 
 User.init(
     {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            primaryKey: true,
             unique: true,
         },
         first_name: {

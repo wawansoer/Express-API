@@ -32,7 +32,7 @@ const UserController = {
 
     async removeUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = req.params.id;
+            const userId = Number(req.params.id);
             await UserService.removeUser(userId);
             res.status(200).json({ message: 'User removed successfully.' });
         } catch (error) {

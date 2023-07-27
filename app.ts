@@ -14,10 +14,16 @@ const app = express();
 app.use(express.json());
 app.use('/', router);
 
-async function main() {
+/**
+ * The main function is responsible for authenticating the connection to the database and creating the necessary tables.
+ * 
+ * @returns {Promise<void>} A promise that resolves when the function completes.
+ */
+async function main(): Promise<void> {
     try {
+        // Authenticate the connection to the database
         await sequelize.authenticate();
-        console.timeStamp("Connected to database")
+        console.timeStamp("Connected to database");
 
         // This creates the table in the database. Use force: true only during development to drop the existing table.
         let migrate = false
@@ -25,7 +31,7 @@ async function main() {
             migrate = true
             await User.sync({ force: migrate });
             await Task.sync({ force: migrate });
-            console.info("Success create table (check on app.ts)")
+            console.info("Success create table (check on app.ts)");
         }
     } catch (error) {
         console.error('Error occurred:', error);
@@ -35,15 +41,14 @@ async function main() {
 main();
 
 
-// cron.schedule('*/3 * * * * *', async () => {
-//     const data = await TaskService.addTask();
-//     if (data === null) {
-//         console.log('Data is null. Exiting cron job.');
-//     }
-// });
+cron.schedule('* */30 * * * *', async () => {
+    const data = await TaskService.addTask();
+    if (data === null) {
+        console.log('Data is null. Exiting cron job.');
+    }
+});
 
-const MAX_RETRY_COUNT = Number(process.env.MAX_RETRY);
-cron.schedule('*/10 * * * * *', async () => {
+cron.schedule('* */15 * * * *', async () => {
     const data = await TaskService.getUnsentTasks();
     if (data === null) {
         console.log('Data is null. Exiting cron job.');
