@@ -41,12 +41,12 @@ async function main(): Promise<void> {
 main();
 
 
-cron.schedule('*/30 * * * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
     console.log(new Date() + " : Run cron to get user bithday at 9 AM ")
     await TaskService.addTask();
 });
 
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/30 * * * * *', async () => {
     console.log(new Date() + " : Run cron to sent email ")
     const data = await TaskService.getUnsentTasks();
 

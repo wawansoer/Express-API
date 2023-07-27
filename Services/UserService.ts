@@ -1,6 +1,7 @@
 import sequelize from '../Configs/SequelizeConfig';
 import { Op } from 'sequelize';
 import User from '../Models/UserModel';
+import { error } from 'console';
 
 class UserService {
     async addUser(userInput: {
@@ -15,9 +16,41 @@ class UserService {
     }
 
     async removeUser(id: number): Promise<void> {
+        const user = await User.findOne({ where: { id: id } });
+
+        if (!user) {
+            throw error;
+        }
+
         await User.destroy({ where: { id } });
     }
+    async updateUser(userId: number, updatedUserData: {
+        email?: string;
+        first_name?: string;
+        last_name?: string;
+        birthday_date?: Date;
+        timezone?: string;
+        location?: string;
+    }): Promise<User | null> {
+        try {
+            // Find the user by ID
+            const user = await User.findOne({ where: { id: userId } });
 
+            if (!user) {
+                // User not found
+                return null;
+            }
+
+            // Update the user's data with the provided fields
+            await user.update(updatedUserData);
+
+            // Return the updated user
+            return user;
+        } catch (error) {
+            // Handle errors here if needed
+            throw error;
+        }
+    }
     async getUsersWithBirthdayAt9AM() {
         try {
             const users = await User.findAll({

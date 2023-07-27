@@ -50,3 +50,20 @@ export const AddUserValidator = [
         }),
     body('location').notEmpty().withMessage('Location is required'),
 ];
+
+export const UpdateUserValidator = [
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('first_name').notEmpty().withMessage('First name is required'),
+    body('last_name').notEmpty().withMessage('Last name is required'),
+    body('birthday_date').isISO8601().toDate().withMessage('Invalid birthday date'),
+    body('timezone').notEmpty().withMessage('Timezone is required')
+        .custom(isValidTimezoneFormat).withMessage('Timezone Format Is Invalid')
+        .custom(async (value) => {
+            if (moment.tz.names().includes(value)) {
+                return true;
+            } else {
+                throw new Error('Invalid timezone identifier');
+            }
+        }),
+    body('location').notEmpty().withMessage('Location is required'),
+];

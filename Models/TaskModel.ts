@@ -1,4 +1,3 @@
-import UserModel from '../Models/UserModel';
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../Configs/SequelizeConfig';
 class Task extends Model {
@@ -20,10 +19,6 @@ Task.init(
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            references: {
-                model: UserModel,
-                key: 'email',
-            },
         },
         message: {
             type: DataTypes.STRING,

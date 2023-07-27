@@ -25,7 +25,7 @@ class TaskServie {
                 where: {
                     sent: false,
                 },
-                order: [['createdAt', 'DESC']],
+                order: [['createdAt', 'ASC']],
             });
             return unsentTasks
         } catch (error) {
